@@ -117,71 +117,74 @@ class FormationSimplestTentCase(unittest.TestCase):
 
         f.form_units()
 
-        self.assertEqual(f._formation, None)
+        self.assertEqual(f._units_positions, {})
 
         u = units.UnitSimplest(0)
         f.add_units(u)
 
         f.form_units()
 
-        self.assertEqual(f._formation, [[u], [], []])
+        self.assertEqual(f._units_positions, {(0, 0): u})
 
         u1 = units.UnitSimplest(1)
         f.add_units(u1)
 
         f.form_units()
 
-        self.assertEqual(f._formation, [[u], [u1], []])
+        self.assertEqual(f._units_positions, {(0, 0): u, (1, 0): u1})
 
         u2 = units.UnitSimplest(2)
         f.add_units(u2)
 
         f.form_units()
 
-        self.assertEqual(f._formation, [[u], [u1], [u2]])
+        self.assertEqual(f._units_positions, {(0, 0): u, (1, 0): u1, (2, 0): u2})
 
         u3 = units.UnitSimplest(3)
         f.add_units(u3)
 
         f.form_units()
 
-        self.assertEqual(f._formation, [[u, u3], [u1], [u2]])
+        self.assertEqual(f._units_positions[(0, 1)], u3)
 
         u4 = units.UnitSimplest(4)
         f.add_units(u4)
 
         f.form_units()
 
-        self.assertEqual(f._formation, [[u, u3], [u1, u4], [u2]])
+        self.assertEqual(f._units_positions[(1, 1)], u4)
 
         u5 = units.UnitSimplest(5)
         f.add_units(u5)
 
         f.form_units()
 
-        self.assertEqual(f._formation, [[u, u3], [u1, u4], [u2, u5]])
+        self.assertEqual(f._units_positions[(2, 1)], u5)
 
         u6 = units.UnitSimplest(6)
         f.add_units(u6)
 
         f.form_units()
 
-        self.assertEqual(f._formation, [[u, u3, u6], [u1, u4], [u2, u5]])
+        self.assertEqual(f._units_positions[(0, 2)], u6)
 
         u7 = units.UnitSimplest(7)
         f.add_units(u7)
 
         f.form_units()
 
-        self.assertEqual(f._formation, [[u, u3, u6], [u1, None, u4], [u2, u5, u7]])
+        self.assertEqual(f._units_positions[(2, 2)], u7)
+        self.assertEqual(f._units_positions[(1, 2)], u4)
+        self.assertEqual(f._units_positions[(1, 1)], None)
 
         u8 = units.UnitSimplest(8)
         f.add_units(u8)
 
         f.form_units()
 
-        self.assertEqual(f._formation, [[u, u3, u6], [u1, u4, u7], [u2, u5, u8]])
-
+        self.assertEqual(f._units_positions[(1, 2)], u7)
+        self.assertEqual(f._units_positions[(1, 1)], u4)
+        self.assertEqual(f._units_positions[(2, 2)], u8)
 
 
 if __name__ == "__main__":

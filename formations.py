@@ -1,7 +1,7 @@
 class FormationSimplest:
     def __init__(self):
         self._units = []
-        self._formation = None
+        self._units_positions = {}
 
     def add_units(self, units):
         if not isinstance(units, list):
@@ -14,17 +14,31 @@ class FormationSimplest:
         return c
 
     def form_units(self):
-        if not self._units:
-            return
-        self._formation = [[], [],[]]
         for i in range(len(self._units)):
-            self._formation[i % 3].append(self._units[i])
+            self._units_positions[(i % 3, i // 3)] = self._units[i]
+
         if len(self._units) > 3 * 2 + 1:
-            fst_squad_len = len(self._formation[0]) - 1
+            i = (len(self._units) - 1) // 3
+            last_tail = (2, i)
+            second_last = 2 - 1
             try:
-                self._formation[2][fst_squad_len]
-            except IndexError:
-                self._formation[2].append(self._formation[1].pop())
-                tmp = self._formation[1].pop()
-                self._formation[1].append(None)
-                self._formation[1].append(tmp)
+                self._units_positions[last_tail]
+                return
+            except KeyError:
+                j = i
+                while True:
+                    try:
+                        self._units_positions[last_tail] = self._units_positions[(second_last, j)]
+                        self._units_positions[(second_last, j)] = None
+                        break
+                    except KeyError:
+                        j -= 1
+                for k in range(1, 2):
+                    j = i - 1
+                    while True:
+                        try:
+                            self._units_positions[(k, i)] = self._units_positions[(k, j)]
+                            self._units_positions[(k, j)] = None
+                            break
+                        except KeyError:
+                            j -= 1
