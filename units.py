@@ -1,17 +1,32 @@
 import simulation
 
 
+class _Counter(object):
+    def __init__(self):
+        self.value = 0
+
+    def __call__(self):
+        self.value += 1
+        return self.value
+
+
+_get_unit_count = _Counter()
+
+
 class UnitSimplest:
     """Something that exists and act in the world. Moves in only one
     axe. Accelerate `acceleration` units per second."""
 
-    def __init__(self, name='(unnamed)', acceleration=1, direction=0, speed=0, position=0, max_speed=2, max_backward_speed=-1):
+    def __init__(self, name=None, acceleration=1, direction=0, speed=0, position=0, max_speed=2, max_backward_speed=-1):
         self.acceleration = acceleration / simulation.TICKS_PER_SECOND
         self.direction = direction
         self.speed = speed
         self.position = position
         self.max_speed = max_speed / simulation.TICKS_PER_SECOND
         self.max_backward_speed = max_backward_speed / simulation.TICKS_PER_SECOND
+        self._number = _get_unit_count()
+        if name is None:
+            name = self._number
         if isinstance(name, int):
             name = str(name)
         self.name = name

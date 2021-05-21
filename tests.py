@@ -73,10 +73,12 @@ class TestUnitSimplestClass(unittest.TestCase):
         self.assertTrue(math.isclose(u.position, 2 / simulation.TICKS_PER_SECOND))
 
     def test_has_name(self):
-        # TODO: use a global counter for unnamed clases
+        # reset because it's incremented in other tests
+        units._get_unit_count.value = 0
+
         u = units.UnitSimplest()
 
-        self.assertEqual(str(u), '(unnamed)')
+        self.assertEqual(str(u), '1')
 
         u = units.UnitSimplest('rose')
 
@@ -87,6 +89,18 @@ class TestUnitSimplestClass(unittest.TestCase):
         u = units.UnitSimplest(0)
 
         self.assertEqual(str(u), '0')
+
+    def test_new_unit_increment_counter(self):
+        # reset because it's incremented in other tests
+        units._get_unit_count.value = 0
+
+        units.UnitSimplest()
+
+        self.assertEqual(units._get_unit_count.value, 1)
+
+        units.UnitSimplest()
+
+        self.assertEqual(units._get_unit_count.value, 2)
 
 
 class FormationSimplestTentCase(unittest.TestCase):
