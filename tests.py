@@ -173,8 +173,8 @@ class FormationSimplestTentCase(unittest.TestCase):
 
         f.form_units()
 
-        self.assertEqual(f._units_positions[(2, 2)], u7)
-        self.assertEqual(f._units_positions[(1, 2)], u4)
+        self.assertEqual(f._units_positions[(2, 2)], u4)
+        self.assertEqual(f._units_positions[(1, 2)], u7)
         self.assertEqual(f._units_positions[(1, 1)], None)
 
         u8 = units.UnitSimplest(8)
@@ -185,6 +185,15 @@ class FormationSimplestTentCase(unittest.TestCase):
         self.assertEqual(f._units_positions[(1, 2)], u7)
         self.assertEqual(f._units_positions[(1, 1)], u4)
         self.assertEqual(f._units_positions[(2, 2)], u8)
+
+    def test_number_of_line_attribute(self):
+        f = formations.FormationSimplest()
+
+        self.assertEqual(f.number_of_lines, 3)
+
+        f = formations.FormationSimplest(number_of_lines=4)
+
+        self.assertEqual(f.number_of_lines, 4)
 
 
 if __name__ == "__main__":

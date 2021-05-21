@@ -1,7 +1,8 @@
 class FormationSimplest:
-    def __init__(self):
+    def __init__(self, number_of_lines=3):
         self._units = []
         self._units_positions = {}
+        self.number_of_lines = number_of_lines
 
     def add_units(self, units):
         if not isinstance(units, list):
@@ -15,30 +16,17 @@ class FormationSimplest:
 
     def form_units(self):
         for i in range(len(self._units)):
-            self._units_positions[(i % 3, i // 3)] = self._units[i]
+            self._units_positions[(i % self.number_of_lines, i // self.number_of_lines)] = self._units[i]
 
-        if len(self._units) > 3 * 2 + 1:
-            i = (len(self._units) - 1) // 3
-            last_tail = (2, i)
-            second_last = 2 - 1
-            try:
-                self._units_positions[last_tail]
-                return
-            except KeyError:
-                j = i
-                while True:
-                    try:
-                        self._units_positions[last_tail] = self._units_positions[(second_last, j)]
-                        self._units_positions[(second_last, j)] = None
-                        break
-                    except KeyError:
-                        j -= 1
-                for k in range(1, 2):
-                    j = i - 1
-                    while True:
-                        try:
-                            self._units_positions[(k, i)] = self._units_positions[(k, j)]
-                            self._units_positions[(k, j)] = None
-                            break
-                        except KeyError:
-                            j -= 1
+        if len(self._units) > self.number_of_lines * 2 + 1 and len(self._units) % self.number_of_lines > 1:
+            # If true means there's enough units to close the tail of the formation. Closing the tail is:
+            # Going from > to
+            # u u u     u u u
+            # u u u  >  u   u
+            #   u u     u u u
+            second_last = self.number_of_lines - 2
+            line_length = len(self._units) // self.number_of_lines
+            for i in range(second_last, 0, -1):
+                if self._units_positions.get((i + 1, line_length)) is None:
+                    self._units_positions[(i + 1, line_length)] = self._units_positions[(i, line_length - 1)]
+                    self._units_positions[(i, line_length - 1)] = None
